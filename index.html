@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="loading-screen" class="screen active">
+        <div class="loader"></div>
+        <h1>Loading...</h1>
+    </div>
+
+    <div id="confirm-screen" class="screen">
+        <h1>Game Description</h1>
+        <p>Get ready to play the risk-assessment game!</p>
+        <button id="start-game-btn">Start Game</button>
+    </div>
+
+    <div id="game-screen" class="screen">
+        <h1>Arrange Cards Based on Risk</h1>
+        <div id="carousel" class="carousel">
+            <!-- Draggable Images (Cards) -->
+            <img src="image1.jpg" alt="Card 1" class="card" draggable="true" id="card1">
+            <img src="image2.jpg" alt="Card 2" class="card" draggable="true" id="card2">
+            <img src="image3.jpg" alt="Card 3" class="card" draggable="true" id="card3">
+            <img src="image4.jpg" alt="Card 4" class="card" draggable="true" id="card4">
+        </div>
+    
+        <div id="boxes" class="boxes">
+            <!-- Drop boxes where images will be locked -->
+            <div class="drop-box" id="box1">Drop here</div>
+            <div class="drop-box" id="box2">Drop here</div>
+            <div class="drop-box" id="box3">Drop here</div>
+            <div class="drop-box" id="box4">Drop here</div>
+        </div>
+    
+        <div id="timer"></div>
+        <button id="done-btn" class="hidden">Done Giving a Thought</button>
+    </div>
+
+    <div id="game-over-screen" class="screen">
+        <h1>Thank you for playing!</h1>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
