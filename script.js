@@ -4,9 +4,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const gameScreen = document.getElementById('game-screen');
     const gameOverScreen = document.getElementById('game-over-screen');
     const startGameBtn = document.getElementById('start-game-btn');
-    const doneBtn = document.getElementById('done-btn');
     const timerElement = document.getElementById('timer');
-    
+    const submitBtn = document.createElement('button');
+    submitBtn.textContent = 'Submit';
+    submitBtn.style.display = 'none';
+    gameScreen.appendChild(submitBtn);
+
+    const cards = document.querySelectorAll('.card');
+    const dropBoxes = document.querySelectorAll('.drop-box');
+
     // Ensure only loading screen is visible initially
     loadingScreen.classList.add('active');
 
@@ -14,18 +20,14 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
         loadingScreen.classList.remove('active');
         confirmScreen.classList.add('active');
-    }, 3000); // Loading screen lasts for 3 seconds
+    }, 2000); // Loading screen lasts for 2 seconds
 
     // Stage 2: Start Game
     startGameBtn.addEventListener('click', () => {
         confirmScreen.classList.remove('active');
         gameScreen.classList.add('active');
-        startTimer(1); // 5 minutes timer
+        startTimer(0.3); // 3 minutes timer
     });
-
-    //New code starts here
-    const cards = document.querySelectorAll('.card');
-    const dropBoxes = document.querySelectorAll('.drop-box');
 
     // Add dragstart event listener to all cards
     cards.forEach(card => {
@@ -35,35 +37,60 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add dragover and drop event listeners to all drop boxes
     dropBoxes.forEach(box => {
         box.addEventListener('dragover', dragOver);
+        box.addEventListener('dragleave', dragLeave);
         box.addEventListener('drop', drop);
     });
 
     function dragStart(e) {
-        // Store the ID of the card being dragged
         e.dataTransfer.setData('text/plain', e.target.id);
+        e.target.style.opacity = '0.5';
+        e.target.style.cursor = 'grabbing';  // Change cursor to 'grabbing' when drag starts
+    }
+
+    function dragEnd(e) {
+        e.target.style.opacity = '1';
     }
 
     function dragOver(e) {
-        e.preventDefault(); // Necessary to allow dropping
-        e.target.classList.add('drag-over');
-    }
-
-    function drop(e) {
         e.preventDefault();
-        e.target.classList.remove('drag-over');
-
-        const cardId = e.dataTransfer.getData('text/plain');
-        const card = document.getElementById(cardId);
-
-        // Check if the drop box is already occupied
-        if (!e.target.classList.contains('locked')) {
-            // Append the card to the drop box
-            e.target.appendChild(card);
-            e.target.classList.add('locked'); // Lock the drop zone
-            e.target.textContent = ''; // Remove 'Drop here' text
+        if (e.target.classList.contains('drop-box') && !e.target.classList.contains('occupied')) {
+            e.target.classList.add('drag-over');
         }
     }
-    //New code ends here
+
+    function dragLeave(e) {
+        if (e.target.classList.contains('drop-box')) {
+            e.target.classList.remove('drag-over');
+        }
+    }
+    
+    function drop(e) {
+        e.preventDefault();
+        const cardId = e.dataTransfer.getData('text/plain');
+        const draggedCard = document.getElementById(cardId);
+        let dropTarget = e.target;
+
+        // If the drop target is a card, get its parent drop-box
+        if (dropTarget.classList.contains('card')) {
+            dropTarget = dropTarget.parentElement;
+        }
+
+        if (draggedCard && dropTarget.classList.contains('drop-box')) {
+            const existingCard = dropTarget.querySelector('.card');
+            
+            if (existingCard) {
+                // Swap the cards
+                const draggedCardParent = draggedCard.parentElement;
+                draggedCardParent.appendChild(existingCard);
+                dropTarget.appendChild(draggedCard);
+            } else {
+                // Move the card to the empty drop-box
+                dropTarget.appendChild(draggedCard);
+            }
+        }
+
+        dropTarget.classList.remove('drag-over');
+    }
 
     // Stage 3: Timer Logic
     function startTimer(minutes) {
@@ -73,7 +100,6 @@ document.addEventListener("DOMContentLoaded", () => {
             let seconds = time % 60;
             timerElement.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
             time--;
-
             if (time < 0) {
                 clearInterval(interval);
                 freezeScreen();
@@ -82,11 +108,50 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function freezeScreen() {
-        doneBtn.classList.remove('hidden');
-        // Freeze the game screen here, e.g., by preventing further drag-and-drop
+        timerElement.style.display = 'none';
+        disableDragAndDrop();
+        
+        const overlay = document.createElement('div');
+        overlay.className = 'freeze-overlay';
+        overlay.textContent = 'Game Frozen';
+        gameScreen.appendChild(overlay);
+        
+        setTimeout(() => {
+            gameScreen.removeChild(overlay);
+            enableDragAndDrop();
+            submitBtn.style.display = 'block';
+        }, 10000); // 1 minute freeze
+    }
+    
+    function disableDragAndDrop() {
+        cards.forEach(card => {
+            card.setAttribute('draggable', 'false');
+            card.removeEventListener('dragstart', dragStart);
+            card.removeEventListener('dragend', dragEnd);
+        });
+        dropBoxes.forEach(box => {
+            box.removeEventListener('dragover', dragOver);
+            box.removeEventListener('dragleave', dragLeave);
+            box.removeEventListener('drop', drop);
+        });
+    }
+    
+    function enableDragAndDrop() {
+        cards.forEach(card => {
+            card.setAttribute('draggable', 'true');
+            card.addEventListener('dragstart', dragStart);
+            card.addEventListener('dragend', dragEnd);
+        });
+        dropBoxes.forEach(box => {
+            box.addEventListener('dragover', dragOver);
+            box.addEventListener('dragleave', dragLeave);
+            box.addEventListener('drop', drop);
+        });
     }
 
-    doneBtn.addEventListener('click', () => {
+    enableDragAndDrop();
+
+    submitBtn.addEventListener('click', () => {
         gameScreen.classList.remove('active');
         gameOverScreen.classList.add('active');
     });
