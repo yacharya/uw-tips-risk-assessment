@@ -2,46 +2,108 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UW TIPS - Risk Assessment Game</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Include a viewport meta tag for responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+    <!-- Loading Screen -->
     <div id="loading-screen" class="screen active">
-        <div class="loader"></div>
-        <h2>Loading...</h2>
-    </div>
-
-    <div id="confirm-screen" class="screen">
-        <h1>Game Description</h1>
-        <p>Get ready to play the risk-assessment game!</p>
-        <button id="start-game-btn">Start Game</button>
-    </div>
-
-    <div id="game-screen" class="screen">
-        <h1>Arrange Cards Based on Risk</h1>
-        <div id="carousel" class="carousel">
-            <!-- Draggable Images (Cards) -->
-            <img src="images/street_racing.png" alt="Card 1" class="card" draggable="true" id="card1">
-            <img src="images/driving_at_dusk.png" alt="Card 2" class="card" draggable="true" id="card2">
-            <img src="images/driving_in_daylight.png" alt="Card 3" class="card" draggable="true" id="card3">
-            <img src="images/driving_plowed_road.png" alt="Card 4" class="card" draggable="true" id="card4">
+        <div class="container">
+            <div class="logo-container">
+                <!-- Replace 'logo.png' with the path to your logo image -->
+                <img src="uw-tips.png" alt="App Logo" id="logo">
+            </div>
+            <div class="loader"></div>
+            <h2>Loading...</h2>
         </div>
-    
-        <div id="boxes" class="boxes">
-            <!-- Drop boxes where images will be locked -->
-            <div class="drop-box" id="box1">Drop here</div>
-            <div class="drop-box" id="box2">Drop here</div>
-            <div class="drop-box" id="box3">Drop here</div>
-            <div class="drop-box" id="box4">Drop here</div>
-        </div>
-    
-        <div id="timer"></div>
-        <button id="done-btn" class="hidden">Done Giving a Thought</button>
     </div>
 
-    <div id="game-over-screen" class="screen">
-        <h1>Thank you for playing!</h1>
+    <!-- Confirm Screen -->
+    <div id="confirm-screen" class="screen hidden">
+        <div class="container">
+            <div class="logo-container">
+                <img src="uw-tips.png" alt="App Logo" id="logo">
+            </div>
+            <h1>Risk Assessment Game</h1>
+            <p>Get ready to play the risk-assessment game!</p>
+            <button id="start-game-btn">Start Game</button>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen hidden">
+        <div class="container">
+            <div class="logo-container">
+                <img src="uw-tips.png" alt="App Logo" id="logo">
+            </div>
+
+            <h1>Arrange Cards Based on Risk</h1>
+            <div id="timer"></div>
+
+            <div id="carousel" class="carousel">
+                <!-- Draggable Images (Cards) -->
+                <img src="images/street_racing.png" alt="Card 1" class="card" draggable="true" id="card1">
+                <img src="images/driving_at_dusk.png" alt="Card 2" class="card" draggable="true" id="card2">
+                <img src="images/driving_in_daylight.png" alt="Card 3" class=" card" draggable="true" id="card3">
+                <img src="images/driving_plowed_road.png" alt="Card 4" class="card" draggable="true" id="card4">
+                <img src="images/spilled_blood.png" alt="Card 5" class="card" draggable="true" id="card5">
+            </div>
+        
+            <svg width="100" height="50" xmlns="http://www.w3.org/2000/svg">
+                <line x1="10" y1="25" x2="90" y2="25" stroke="black" stroke-width="2"/>
+                <polygon points="90,20 100,25 90,30" fill="black"/>
+                <text x="50" y="50" font-size="12" fill="black" text-anchor="middle">Arrange from left to right</text>
+            </svg>
+            
+            <div id="boxes" class="boxes">
+                <!-- Drop boxes where images will be locked -->
+                <div class="drop-box" id="box1"><span class="drop-text">1</span></div>
+                <div class="drop-box" id="box2"><span class="drop-text">2</span></div>
+                <div class="drop-box" id="box3"><span class="drop-text">3</span></div>
+                <div class="drop-box" id="box4"><span class="drop-text">4</span></div>
+                <div class="drop-box" id="box5"><span class="drop-text">5</span></div>
+            </div>
+
+            <div id="boxes" class="boxes">
+                <div class="drop-box" id="box6"><span class="drop-text">10</span></div>
+                <div class="drop-box" id="box7"><span class="drop-text">9</span></div>
+                <div class="drop-box" id="box8"><span class="drop-text">8</span></div>
+                <div class="drop-box" id="box9"><span class="drop-text">7</span></div>
+                <div class="drop-box" id="box10"><span class="drop-text">6</span></div>
+            </div>
+
+            <svg width="100" height="50" xmlns="http://www.w3.org/2000/svg">
+                <text x="50" y="50" font-size="10" fill="black" text-anchor="middle">This is the arrow</text>
+                <!-- Arrow Shaft -->
+                <line x1="90" y1="25" x2="10" y2="25" stroke="black" stroke-width="2"/>
+                <!-- Arrowhead -->
+                <polygon points="10,20 0,25 10,30" fill="black"/>
+            </svg>            
+
+            <div id="carousel" class="carousel">
+                <!-- Draggable Images (Cards) -->
+                <img src="images/helping_diarrhea.png" alt="Card 6" class="card" draggable="true" id="card6">
+                <img src="images/helping_without_ppe.png" alt="Card 7" class="card" draggable="true" id="card7">
+                <img src="images/helping_without_ppe_road.png" alt="Card 8" class=" card" draggable="true" id="card8">
+                <img src="images/telehealth_appointment.png" alt="Card 9" class="card" draggable="true" id="card9">
+                <img src="images/checking_wellness_appointment.png" alt="Card 10" class="card" draggable="true" id="card10">
+            </div>
+        
+            <button id="done-btn" class="hidden">Done Giving a Thought</button>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="screen hidden">
+        <div class="container">
+            <div class="logo-container">
+                <img src="uw-tips.png" alt="App Logo" id="logo">
+            </div>
+            <h1>Thank you for playing!</h1>
+            <button id="restart-btn">Play Again</button>
+        </div>
     </div>
 
     <script src="script.js"></script>

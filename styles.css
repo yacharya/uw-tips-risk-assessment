@@ -1,36 +1,87 @@
-/* General Styles */
-body {
-    font-family: Arial, sans-serif;
+/* Reset default styles */
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f5f5f5;
 }
 
-.screen { 
-    display: none;
+/* Theme colors */
+:root {
+    --primary-color: #6a0dad; /* Purple */
+    --secondary-color: #ffffff; /* White */
+    --background-color: #f3e5f5; /* Light Purple Hue */
+    --text-color: #1e1e1e; /* Dark Text */
+    --button-color: #6a0dad; /* Purple */
+    --button-hover-color: #7b1fa2; /* Darker Purple */
+    --disabled-button-color: #c0c0c0; /* Grey */
+    --accent-color: #e8eaf6; /* Very Light Purple */
+    --link-color: #0000ff; /* Blue */
+}
+
+/* Body styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+}
+
+/* Container styling */
+.container {
+    max-width: 1800px;
+    max-height: 1500px;
+    margin: 10px auto;
+    padding: 10px;
+    display: flex;
     flex-direction: column;
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+    text-align: center;
     align-items: center;
+    overflow-x: auto; /* Allow horizontal scrolling if necessary */
+}
+
+/* Logo styling */
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#logo {
+    max-width: 150px;
+    width: 100%;
+    height: auto;
+}
+
+/* Screen visibility */
+.screen {
+    display: none;
 }
 
 .screen.active {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.screen.hidden {
+    display: none;
 }
 
 .hidden {
     display: none;
 }
 
+/* Loader */
 .loader {
-    border: 16px solid #f3f3f3;
-    border-top: 16px solid #3498db;
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid var(--button-color);
     border-radius: 50%;
-    width: 90px;
-    height: 90px;
-    animation: spin 2s linear infinite;
+    width: 60px;
+    height: 60px;
+    animation: spin 1.5s linear infinite;
+    margin: 0 auto 20px auto;
 }
 
 @keyframes spin {
@@ -38,88 +89,163 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* Carousel & Boxes */
-.carousel {
-    display: flex;
-    overflow: auto;
-    width: 80%;
+/* Headings */
+h1, h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
 }
 
-.boxes {
-    display: flex;
+h1 {
+    font-size: 28px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+/* Paragraph */
+p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+button {
+    background-color: var(--button-color);
+    color: var(--secondary-color);
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
     margin-top: 20px;
+}
+
+button:hover {
+    background-color: var(--button-hover-color);
+}
+
+button:disabled {
+    background-color: var(--disabled-button-color);
+    cursor: not-allowed;
 }
 
 /* Timer */
 #timer {
     font-size: 20px;
-    margin-top: 20px;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+/* Carousel & Boxes in a Single Line */
+.carousel, .boxes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap; /* Prevent wrapping to keep everything in a single row */
+    gap: 20px; /* Add space between cards and boxes */
+    margin-bottom: 20px;
 }
 
 /* Cards (Images) */
 .card {
-    width: 100px;
-    height: 150px;
-    margin-right: 10px;
+    width: 200%; /* Set to 100% so it fills the drop box properly */
+    max-width: 250px; /* Maintain a consistent size limit */
+    height: auto; /* Maintain aspect ratio */
+    margin: 10px;
     border: 2px solid #ccc;
+    border-radius: 8px;
     cursor: grab;
-    transition: all 0.3s ease;
+    transition: transform 0.2s;
+    object-fit: contain; /* Ensure the image fits within the card */
 }
 
 .card:active {
     cursor: grabbing;
+    transform: scale(1.05);
 }
 
 /* Drop Boxes */
 .drop-box {
-    width: 120px;
-    height: 160px;
+    width: 200px; /* Adjust the size based on your card dimensions */
+    height: 150px; /* Set height to maintain proper layout */
     margin: 10px;
-    border: 2px dashed #aaa;
+    border: 2px dashed black;
+    border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 16px;
-    color: #888;
-    transition: all 0.3s ease;
-}
-
-.drop-box.drag-over {
-    background-color: rgba(52, 152, 219, 0.2);
-    border-color: #3498db;
-}
-
-.drop-box.occupied {
-    border-style: solid;
-    border-color: #2ecc71;
-}
-
-.drop-box.locked {
-    border-color: green;
     color: black;
+    background-color: var(--accent-color);
+    transition: background-color 0.3s, border-color 0.3s;
+    position: relative;
+    overflow: hidden; /* Prevent overflowing elements */
 }
 
 .drop-box.drag-over {
-    border-color: #3498db;
+    background-color: rgba(122, 79, 161, 0.2);
+    border-color: var(--button-color);
 }
 
+/* Ensure dropped cards are full size and keep their aspect ratio */
 .drop-box .card {
     width: 100%;
-    height: 100%;
-    object-fit: contain;
+    height: auto;
+    max-width: 180px;
+    object-fit: contain; /* Ensure the image fits within the box without being cropped */
+    border-radius: 6px;
 }
 
+/* Drop Text Styling */
+.drop-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: black;
+    pointer-events: none; /* Prevent text from interfering with drag-and-drop */
+}
+
+/* Freeze Overlay */
 .freeze-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(200, 200, 200, 0.7);
+    background-color: rgba(200, 200, 200, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 24px;
     color: #333;
     z-index: 1000;
+    border-radius: 8px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    h1, h2 {
+        font-size: 24px;
+    }
+
+    p, button {
+        font-size: 16px;
+    }
+
+    .card, .drop-box {
+        width: 80px;
+        height: 120px;
+    }
+
+    #logo {
+        max-width: 100px;
+    }
 }
