@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const restartBtn = document.getElementById('restart-btn');
 
     const cards = document.querySelectorAll('.card');
-    const dropBoxes = document.querySelectorAll('.drop-box');
+    const dropBoxes = document.querySelectorAll('#boxes .drop-box');
     const dropBoxesRow2 = document.querySelectorAll('#boxes-row2 .drop-box');
 
     // Ensure only loading screen is visible initially
@@ -33,33 +33,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function assignGradientColors() {
         const firstRowBoxes = document.querySelectorAll('#boxes .drop-box');
-        //const secondRowBoxes = document.querySelectorAll('#boxes-row2 .drop-box');
+        const secondRowBoxes = document.querySelectorAll('#boxes-row2 .drop-box');
+
+        console.log('First row boxes:', firstRowBoxes.length);
+        console.log('Second row boxes:', secondRowBoxes.length);
         
         // Define gradient ranges
         const firstRowColors = [
-        'rgba(255, 255, 255, 0.6)',    // Bright green
-        'rgba(240, 240, 240, 0.6)',  // Light green-yellow
-        'rgba(220, 220, 220, 0.6)',  // Yellowish-orange
-        'rgba(200, 200, 200, 0.6)',  // Light orange
-        'rgba(180, 180, 180, 0.6)'    // Orange
+        'rgba(255, 255, 255, 0.6)',
+        'rgba(240, 240, 240, 0.6)',
+        'rgba(220, 220, 220, 0.6)',
+        'rgba(200, 200, 200, 0.6)',
+        'rgba(180, 180, 180, 0.6)'
         ];
 
         const secondRowColors = [
-            'rgba(80, 80, 80, 0.6)',   // Bright red
-            'rgba(100, 100, 100, 0.6)',  // Orange-red
-            'rgba(120, 120, 120, 0.6)', // Soft red-orange
-            'rgba(140, 140, 140, 0.6)',// Light red-orange
-            'rgba(160, 160, 160, 0.6)'   // Orange
+            'rgba(80, 80, 80, 0.6)',
+            'rgba(100, 100, 100, 0.6)',
+            'rgba(120, 120, 120, 0.6)',
+            'rgba(140, 140, 140, 0.6)',
+            'rgba(160, 160, 160, 0.6)'
         ];
         
         // Assign colors to the first row
         firstRowBoxes.forEach((box, index) => {
             box.style.backgroundColor = firstRowColors[index];
+            console.log(`First row - Box ${index + 1}:`, firstRowColors[index]);
         });
     
         // Assign colors to the second row
         secondRowBoxes.forEach((box, index) => {
             box.style.backgroundColor = secondRowColors[index];
+            console.log(`Second row - Box ${index + 6}:`, secondRowColors[index]);
         });
     }
 
@@ -235,15 +240,47 @@ document.addEventListener("DOMContentLoaded", () => {
         timerElement.style.display = 'block';
         timerElement.textContent = '';
 
+        // Reset timer
+        clearInterval(timerInterval);
+        timerElement.style.display = 'block';
+        timerElement.textContent = '';
+
         doneBtn.classList.add('hidden');
+
+        // Remove freeze overlay if present
+        const freezeOverlay = document.querySelector('.freeze-overlay');
+        if (freezeOverlay) {
+        freezeOverlay.remove();
+        }
 
         // Move cards back to carousel
         const carousel = document.getElementById('carousel');
         cards.forEach(card => {
-            if (card.parentElement.classList.contains('drop-box')) {
+            const carousel = document.getElementById('carousel');
+            if (card.parentElement && !carousel.contains(card)) {
                 card.parentElement.removeChild(card);
                 carousel.appendChild(card);
             }
         });
+
+        /*
+        // Clear drop boxes and re-add placeholder text
+        const allDropBoxes = document.querySelectorAll('.drop-box');
+        allDropBoxes.forEach(box => {
+        const existingCard = box.querySelector('.card');
+        if (existingCard) {
+            box.removeChild(existingCard); // Remove any card present in the drop box
+        }
+
+        if (!box.querySelector('.drop-text')) {
+            const dropText = document.createElement('span');
+            dropText.classList.add('drop-text');
+            dropText.textContent = 'Drop Here';
+            box.appendChild(dropText); // Reapply "Drop Here" text
+        }
+        });
+        */
+        
+        assignGradientColors();
     });
 });

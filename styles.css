@@ -143,7 +143,6 @@ button:disabled {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: nowrap; /* Prevent wrapping to keep everything in a single row */
     gap: 20px; /* Add space between cards and boxes */
     margin-bottom: 20px;
 }
