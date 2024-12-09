@@ -1,94 +1,76 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Screen elements
     const loadingScreen = document.getElementById('loading-screen');
     const confirmScreen = document.getElementById('confirm-screen');
     const gameScreen = document.getElementById('game-screen');
     const gameOverScreen = document.getElementById('game-over-screen');
+
+    // Buttons
     const startGameBtn = document.getElementById('start-game-btn');
-    const timerElement = document.getElementById('timer');
+    const resetBtn = document.getElementById('reset-btn');
     const doneBtn = document.getElementById('done-btn');
     const restartBtn = document.getElementById('restart-btn');
 
-    const cards = document.querySelectorAll('.card');
+    // Carousels & drop boxes
+    const carousel1 = document.getElementById('carousel1');
+    const carousel2 = document.getElementById('carousel2');
     const dropBoxes = document.querySelectorAll('#boxes .drop-box');
     const dropBoxesRow2 = document.querySelectorAll('#boxes-row2 .drop-box');
 
-    // Ensure only loading screen is visible initially
-    // Note: 'active' class is already set in HTML for loading screen
+    // Cards
+    const cards = Array.from(document.querySelectorAll('.card'));
 
-    // Stage 1: Simulate Loading Screen
+    // Multiple carousels array
+    const carousels = [carousel1, carousel2];
+
+    // Initial Loading Screen Simulation
     setTimeout(() => {
         loadingScreen.classList.add('hidden');
         confirmScreen.classList.remove('hidden');
         confirmScreen.classList.add('active');
-    }, 2000); // Loading screen lasts for 2 seconds
+    }, 2000);
 
-    // Stage 2: Start Game
+    // Start Game
     startGameBtn.addEventListener('click', () => {
         confirmScreen.classList.remove('active');
         confirmScreen.classList.add('hidden');
         gameScreen.classList.remove('hidden');
         gameScreen.classList.add('active');
-        startTimer(0.5); // 3 minutes timer
+        enableDragAndDrop();
+        assignGradientColors();
     });
 
+    // Assign gradient colors to drop boxes
     function assignGradientColors() {
         const firstRowBoxes = document.querySelectorAll('#boxes .drop-box');
         const secondRowBoxes = document.querySelectorAll('#boxes-row2 .drop-box');
 
-        console.log('First row boxes:', firstRowBoxes.length);
-        console.log('Second row boxes:', secondRowBoxes.length);
-        
-        // Define gradient ranges
         const firstRowColors = [
-        'rgba(255, 255, 255, 0.6)',
-        'rgba(240, 240, 240, 0.6)',
-        'rgba(220, 220, 220, 0.6)',
-        'rgba(200, 200, 200, 0.6)',
-        'rgba(180, 180, 180, 0.6)'
+            'rgba(255, 255, 255, 0.6)',
+            'rgba(240, 240, 240, 0.6)',
+            'rgba(220, 220, 220, 0.6)',
+            'rgba(200, 200, 200, 0.6)',
+            'rgba(180, 180, 180, 0.6)'
         ];
 
         const secondRowColors = [
-            'rgba(80, 80, 80, 0.6)',
-            'rgba(100, 100, 100, 0.6)',
-            'rgba(120, 120, 120, 0.6)',
+            'rgba(160, 160, 160, 0.6)',
             'rgba(140, 140, 140, 0.6)',
-            'rgba(160, 160, 160, 0.6)'
+            'rgba(120, 120, 120, 0.6)',
+            'rgba(100, 100, 100, 0.6)',
+            'rgba(80, 80, 80, 0.6)'
         ];
-        
-        // Assign colors to the first row
+
         firstRowBoxes.forEach((box, index) => {
             box.style.backgroundColor = firstRowColors[index];
-            console.log(`First row - Box ${index + 1}:`, firstRowColors[index]);
         });
-    
-        // Assign colors to the second row
+
         secondRowBoxes.forEach((box, index) => {
             box.style.backgroundColor = secondRowColors[index];
-            console.log(`Second row - Box ${index + 6}:`, secondRowColors[index]);
         });
     }
 
-    // Add dragstart and dragend event listeners to all cards
-    cards.forEach(card => {
-        card.addEventListener('dragstart', dragStart);
-        card.addEventListener('dragend', dragEnd);
-    });
-
-    // Add dragover and drop event listeners to all drop boxes
-    dropBoxes.forEach(box => {
-        box.addEventListener('dragover', dragOver);
-        box.addEventListener('dragleave', dragLeave);
-        box.addEventListener('drop', drop);
-    });
-
-    // Add event listeners to the second row of drop boxes
-    dropBoxesRow2.forEach(box => {
-        box.addEventListener('dragover', dragOver);
-        box.addEventListener('dragleave', dragLeave);
-        box.addEventListener('drop', drop);
-    });
-
-
+    // Drag functions
     function dragStart(e) {
         e.dataTransfer.setData('text/plain', e.target.id);
         e.target.style.opacity = '0.5';
@@ -102,13 +84,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function dragOver(e) {
         e.preventDefault();
-        if (e.target.classList.contains('drop-box')) {
+        if (e.target.classList.contains('drop-box') || e.target.classList.contains('carousel')) {
             e.target.classList.add('drag-over');
         }
     }
 
     function dragLeave(e) {
-        if (e.target.classList.contains('drop-box')) {
+        if (e.target.classList.contains('drop-box') || e.target.classList.contains('carousel')) {
             e.target.classList.remove('drag-over');
         }
     }
@@ -118,88 +100,35 @@ document.addEventListener("DOMContentLoaded", () => {
         const cardId = e.dataTransfer.getData('text/plain');
         const draggedCard = document.getElementById(cardId);
         let dropTarget = e.target;
-    
-        // If the drop target is a card, get its parent drop-box
-        if (dropTarget.classList.contains('card')) {
+
+        // Climb up DOM to find carousel or drop-box if we dropped onto a nested element
+        while (dropTarget && !dropTarget.classList.contains('carousel') && !dropTarget.classList.contains('drop-box') && !dropTarget.classList.contains('card')) {
             dropTarget = dropTarget.parentElement;
         }
-    
-        if (draggedCard && dropTarget.classList.contains('drop-box')) {
-            const existingCard = dropTarget.querySelector('.card');
-    
-            if (existingCard) {
-                // Swap the cards
-                const draggedCardParent = draggedCard.parentElement;
-                draggedCardParent.appendChild(existingCard);
-                dropTarget.appendChild(draggedCard);
-            } else {
-                // Move the card to the empty drop-box
-                draggedCard.parentElement.removeChild(draggedCard);
-                dropTarget.appendChild(draggedCard);
-            }
-    
-            // Remove only the "Drop Here" text if it exists
-            const dropText = dropTarget.querySelector('.drop-text');
-            if (dropText) {
-                dropTarget.removeChild(dropText);
-            }
+
+        // If we landed on another card, move up one level
+        if (dropTarget && dropTarget.classList.contains('card')) {
+            dropTarget = dropTarget.parentElement;
         }
-    
+
+        if (!draggedCard || !dropTarget) return;
+
+        if (dropTarget.classList.contains('drop-box')) {
+            const existingCard = dropTarget.querySelector('.card');
+            if (existingCard) {
+                // Swap cards
+                draggedCard.parentElement.appendChild(existingCard);
+            }
+            dropTarget.appendChild(draggedCard);
+        } else if (dropTarget.classList.contains('carousel')) {
+            dropTarget.appendChild(draggedCard);
+        }
+
+        draggedCard.setAttribute('draggable', 'true');
         dropTarget.classList.remove('drag-over');
     }
-      
 
-    // Stage 3: Timer Logic
-    function startTimer(minutes) {
-        let time = minutes * 60;
-        const interval = setInterval(() => {
-            let minutesLeft = Math.floor(time / 60);
-            let secondsLeft = time % 60;
-            timerElement.textContent = `Time Left: ${minutesLeft}:${secondsLeft < 10 ? '0' + secondsLeft : secondsLeft}`;
-            time--;
-            if (time < 0) {
-                clearInterval(interval);
-                freezeScreen();
-            }
-        }, 1000);
-    }
-
-    function freezeScreen() {
-        timerElement.style.display = 'none';
-        disableDragAndDrop();
-    
-        const overlay = document.createElement('div');
-        overlay.className = 'freeze-overlay';
-        overlay.textContent = 'Game Paused for 1 Minute';
-        gameScreen.appendChild(overlay);
-    
-        setTimeout(() => {
-            gameScreen.removeChild(overlay);
-            enableDragAndDrop();
-            doneBtn.classList.remove('hidden');
-        }, 60000); // Freeze for 1 minute (60,000 milliseconds)
-    }
-    
-
-    function disableDragAndDrop() {
-        cards.forEach(card => {
-            card.setAttribute('draggable', 'false');
-            card.removeEventListener('dragstart', dragStart);
-            card.removeEventListener('dragend', dragEnd);
-        });
-        dropBoxes.forEach(box => {
-            box.removeEventListener('dragover', dragOver);
-            box.removeEventListener('dragleave', dragLeave);
-            box.removeEventListener('drop', drop);
-        });
-        // Add event listeners to the second row of drop boxes
-        dropBoxesRow2.forEach(box => {
-            box.addEventListener('dragover', dragOver);
-            box.addEventListener('dragleave', dragLeave);
-            box.addEventListener('drop', drop);
-        });
-    }
-
+    // Enable drag-and-drop
     function enableDragAndDrop() {
         cards.forEach(card => {
             card.setAttribute('draggable', 'true');
@@ -211,76 +140,144 @@ document.addEventListener("DOMContentLoaded", () => {
             box.addEventListener('dragleave', dragLeave);
             box.addEventListener('drop', drop);
         });
-        // Add event listeners to the second row of drop boxes
         dropBoxesRow2.forEach(box => {
             box.addEventListener('dragover', dragOver);
             box.addEventListener('dragleave', dragLeave);
             box.addEventListener('drop', drop);
         });
+        carousels.forEach(carousel => {
+            carousel.addEventListener('dragover', dragOver);
+            carousel.addEventListener('dragleave', dragLeave);
+            carousel.addEventListener('drop', drop);
+        });
     }
 
-    enableDragAndDrop();
+    // Disable drag-and-drop
+    function disableDragAndDrop() {
+        cards.forEach(card => {
+            card.setAttribute('draggable', 'false');
+            card.removeEventListener('dragstart', dragStart);
+            card.removeEventListener('dragend', dragEnd);
+        });
 
-    assignGradientColors();
+        dropBoxes.forEach(box => {
+            box.removeEventListener('dragover', dragOver);
+            box.removeEventListener('dragleave', dragLeave);
+            box.removeEventListener('drop', drop);
+        });
 
+        dropBoxesRow2.forEach(box => {
+            box.removeEventListener('dragover', dragOver);
+            box.removeEventListener('dragleave', dragLeave);
+            box.removeEventListener('drop', drop);
+        });
+
+        carousels.forEach(carousel => {
+            carousel.removeEventListener('dragover', dragOver);
+            carousel.removeEventListener('dragleave', dragLeave);
+            carousel.removeEventListener('drop', drop);
+        });
+    }
+
+    // Reset the game
+    function resetGame() {
+        // Clear all cards back to a neutral state
+        cards.forEach(card => {
+            if (card.parentElement && card.parentElement !== carousel1 && card.parentElement !== carousel2) {
+                card.parentElement.removeChild(card);
+            }
+        });
+
+        // Split the cards equally between carousel1 and carousel2
+        const half = Math.ceil(cards.length / 2);
+        const firstHalf = cards.slice(0, half);
+        const secondHalf = cards.slice(half);
+
+        // Clear carousels first
+        while (carousel1.firstChild) carousel1.removeChild(carousel1.firstChild);
+        while (carousel2.firstChild) carousel2.removeChild(carousel2.firstChild);
+
+        // Append first half to carousel1
+        firstHalf.forEach(card => carousel1.appendChild(card));
+        // Append second half to carousel2
+        secondHalf.forEach(card => carousel2.appendChild(card));
+
+        // Re-enable drag and drop
+        enableDragAndDrop();
+        assignGradientColors();
+    }
+
+    // Freeze the cards in place
+    function freezeCards() {
+        disableDragAndDrop();
+    }
+
+    // Display final sequence as card images
+    function displayFinalSequence() {
+        const finalSequenceContainer = document.getElementById('final-sequence');
+        finalSequenceContainer.innerHTML = ''; // Clear previous content
+
+        // Get all drop boxes in order
+        const allBoxes = [
+            ...document.querySelectorAll('#boxes .drop-box'),
+            ...document.querySelectorAll('#boxes-row2 .drop-box')
+        ];
+
+        // For each box, if there's a card, clone it and show it in final sequence
+        allBoxes.forEach(box => {
+            const card = box.querySelector('.card');
+            if (card) {
+                const cardClone = card.cloneNode(true);
+                cardClone.setAttribute('draggable', 'false');
+
+                // Remove event listeners from clone if any
+                cardClone.removeEventListener('dragstart', dragStart);
+                cardClone.removeEventListener('dragend', dragEnd);
+
+                finalSequenceContainer.appendChild(cardClone);
+            } else {
+                const placeholder = document.createElement('div');
+                placeholder.textContent = 'Empty';
+                finalSequenceContainer.appendChild(placeholder);
+            }
+        });
+    }
+
+    // Reset button logic
+    resetBtn.addEventListener('click', () => {
+        resetGame();
+    });
+
+    // Done button logic
     doneBtn.addEventListener('click', () => {
+        // Freeze the cards
+        freezeCards();
+
+        // Hide carousels
+        carousel1.style.display = 'none';
+        carousel2.style.display = 'none';
+
+        // Show final sequence (actual card images)
+        displayFinalSequence();
+
+        // Show thank you message
         gameScreen.classList.remove('active');
         gameScreen.classList.add('hidden');
         gameOverScreen.classList.remove('hidden');
         gameOverScreen.classList.add('active');
     });
 
-    // Restart game functionality
+    // Restart button logic if you want to play again
     restartBtn.addEventListener('click', () => {
-        // Reset game state
+        // Show carousels again
+        carousel1.style.display = '';
+        carousel2.style.display = '';
+
         gameOverScreen.classList.remove('active');
         gameOverScreen.classList.add('hidden');
         confirmScreen.classList.remove('hidden');
         confirmScreen.classList.add('active');
-        timerElement.style.display = 'block';
-        timerElement.textContent = '';
 
-        // Reset timer
-        clearInterval(timerInterval);
-        timerElement.style.display = 'block';
-        timerElement.textContent = '';
-
-        doneBtn.classList.add('hidden');
-
-        // Remove freeze overlay if present
-        const freezeOverlay = document.querySelector('.freeze-overlay');
-        if (freezeOverlay) {
-        freezeOverlay.remove();
-        }
-
-        // Move cards back to carousel
-        const carousel = document.getElementById('carousel');
-        cards.forEach(card => {
-            const carousel = document.getElementById('carousel');
-            if (card.parentElement && !carousel.contains(card)) {
-                card.parentElement.removeChild(card);
-                carousel.appendChild(card);
-            }
-        });
-
-        /*
-        // Clear drop boxes and re-add placeholder text
-        const allDropBoxes = document.querySelectorAll('.drop-box');
-        allDropBoxes.forEach(box => {
-        const existingCard = box.querySelector('.card');
-        if (existingCard) {
-            box.removeChild(existingCard); // Remove any card present in the drop box
-        }
-
-        if (!box.querySelector('.drop-text')) {
-            const dropText = document.createElement('span');
-            dropText.classList.add('drop-text');
-            dropText.textContent = 'Drop Here';
-            box.appendChild(dropText); // Reapply "Drop Here" text
-        }
-        });
-        */
-        
-        assignGradientColors();
+        resetGame();
     });
 });

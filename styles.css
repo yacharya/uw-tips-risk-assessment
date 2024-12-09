@@ -48,6 +48,10 @@ body {
     margin-bottom: 20px;
 }
 
+.instruction-container {
+    text-align: left;
+}
+
 #logo {
     max-width: 150px;
     width: 100%;
@@ -139,7 +143,7 @@ button:disabled {
 }
 
 /* Carousel & Boxes in a Single Line */
-.carousel, .boxes {
+.boxes {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -147,8 +151,25 @@ button:disabled {
     margin-bottom: 20px;
 }
 
+.carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    /* Added properties to keep carousel visible */
+    min-height: 100px;
+    min-width: 300px; 
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9; /* Light background so you can see it's still there */
+}
+
+
 /* Cards (Images) */
 .card {
+    position: relative;
+    z-index: 1;
     width: 200%; /* Set to 100% so it fills the drop box properly */
     max-width: 250px; /* Maintain a consistent size limit */
     height: auto; /* Maintain aspect ratio */

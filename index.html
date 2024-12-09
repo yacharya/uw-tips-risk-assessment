@@ -27,7 +27,12 @@
                 <img src="uw-tips.png" alt="App Logo" id="logo">
             </div>
             <h1>Assessing Risk Game</h1>
-            <p>Get ready to play the risk-assessment game!</p>
+            <p><b>Instructions:</b></p>
+            <div class="instruction-container">
+            <p>1. There are 10 situational cards randomly present on the screen in the form of a carousel, the aim is the arrange the cards based on how risky that card is.</p>
+            <p>2. You have to drag and drop the cards from “Least Risky” to “Most Risky” arrange from Least Risky to 5 on the top row and 6 to Most Risky on the bottom row.</p>
+            <p>3. Enjoy!</p>
+            </div>
             <button id="start-game-btn">Start Game</button>
         </div>
     </div>
@@ -39,10 +44,13 @@
                 <img src="uw-tips.png" alt="App Logo" id="logo">
             </div>
 
-            <h1>Arrange Cards Based on Risk</h1>
+            <div>
+            <h3>Arrange cards from "Least Risky (1)" to "Most Risky (10)"</h3>
+            </div>
+
             <div id="timer"></div>
 
-            <div id="carousel" class="carousel">
+            <div id="carousel1" class="carousel">
                 <!-- Draggable Images (Cards) -->
                 <img src="images/street_racing.png" alt="Card 1" class="card" draggable="true" id="card1">
                 <img src="images/driving_at_dusk.png" alt="Card 2" class="card" draggable="true" id="card2">
@@ -50,15 +58,10 @@
                 <img src="images/driving_plowed_road.png" alt="Card 4" class="card" draggable="true" id="card4">
                 <img src="images/spilled_blood.png" alt="Card 5" class="card" draggable="true" id="card5">
             </div>
-        
-            <svg width="100" height="50" xmlns="http://www.w3.org/2000/svg">
-                <line x1="10" y1="25" x2="90" y2="25" stroke="black" stroke-width="2"/>
-                <polygon points="90,20 100,25 90,30" fill="black"/>
-            </svg>
             
             <div id="boxes" class="boxes">
                 <!-- Drop boxes where images will be locked -->
-                <div class="drop-box" id="box1"><span class="drop-text">1</span></div>
+                <div class="drop-box" id="box1"><span class="drop-text">Least Risky (1)</span></div>
                 <div class="drop-box" id="box2"><span class="drop-text">2</span></div>
                 <div class="drop-box" id="box3"><span class="drop-text">3</span></div>
                 <div class="drop-box" id="box4"><span class="drop-text">4</span></div>
@@ -66,21 +69,14 @@
             </div>
 
             <div id="boxes-row2" class="boxes">
-                <div class="drop-box" id="box6"><span class="drop-text">10</span></div>
-                <div class="drop-box" id="box7"><span class="drop-text">9</span></div>
+                <div class="drop-box" id="box6"><span class="drop-text">6</span></div>
+                <div class="drop-box" id="box7"><span class="drop-text">7</span></div>
                 <div class="drop-box" id="box8"><span class="drop-text">8</span></div>
-                <div class="drop-box" id="box9"><span class="drop-text">7</span></div>
-                <div class="drop-box" id="box10"><span class="drop-text">6</span></div>
-            </div>
+                <div class="drop-box" id="box9"><span class="drop-text">9</span></div>
+                <div class="drop-box" id="box10"><span class="drop-text">Most Risky (10)</span></div>
+            </div>    
 
-            <svg width="100" height="50" xmlns="http://www.w3.org/2000/svg">
-                <!-- Arrow Shaft -->
-                <line x1="90" y1="25" x2="10" y2="25" stroke="black" stroke-width="2"/>
-                <!-- Arrowhead -->
-                <polygon points="10,20 0,25 10,30" fill="black"/>
-            </svg>            
-
-            <div id="carousel" class="carousel">
+            <div id="carousel2" class="carousel">
                 <!-- Draggable Images (Cards) -->
                 <img src="images/helping_diarrhea.png" alt="Card 6" class="card" draggable="true" id="card6">
                 <img src="images/helping_without_ppe.png" alt="Card 7" class="card" draggable="true" id="card7">
@@ -89,7 +85,8 @@
                 <img src="images/checking_wellness_appointment.png" alt="Card 10" class="card" draggable="true" id="card10">
             </div>
         
-            <button id="done-btn" class="hidden">Done Giving a Thought</button>
+            <button id="reset-btn">Reset</button>
+            <button id="done-btn">Done</button>
         </div>
     </div>
 
@@ -100,6 +97,7 @@
                 <img src="uw-tips.png" alt="App Logo" id="logo">
             </div>
             <h1>Thank you for playing!</h1>
+            <div id="final-sequence"></div>
             <button id="restart-btn">Play Again</button>
         </div>
     </div>
