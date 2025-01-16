@@ -212,34 +212,45 @@ document.addEventListener("DOMContentLoaded", () => {
         disableDragAndDrop();
     }
 
-    // Display final sequence as card images
     function displayFinalSequence() {
         const finalSequenceContainer = document.getElementById('final-sequence');
         finalSequenceContainer.innerHTML = ''; // Clear previous content
-
-        // Get all drop boxes in order
+    
+        // Get all drop boxes in order (top row first, then bottom row)
         const allBoxes = [
-            ...document.querySelectorAll('#boxes .drop-box'),
-            ...document.querySelectorAll('#boxes-row2 .drop-box')
+            ...document.querySelectorAll('#boxes .drop-box'), // Top row (1-5)
+            ...document.querySelectorAll('#boxes-row2 .drop-box') // Bottom row (6-10)
         ];
-
-        // For each box, if there's a card, clone it and show it in final sequence
+    
+        // Create a grid container for the final sequence
+        const gridContainer = document.createElement('div');
+        gridContainer.classList.add('grid-container'); // Optional: Add a class for styling
+    
+        // For each box, if there's a card, clone it and add it to the grid
         allBoxes.forEach(box => {
             const card = box.querySelector('.card');
+            const gridItem = document.createElement('div');
+            gridItem.classList.add('grid-item'); // Optional: Add a class for styling
+    
             if (card) {
                 const cardClone = card.cloneNode(true);
                 cardClone.setAttribute('draggable', 'false');
-
+    
                 // Remove event listeners from clone if any
                 cardClone.removeEventListener('dragstart', dragStart);
                 cardClone.removeEventListener('dragend', dragEnd);
-
-                finalSequenceContainer.appendChild(cardClone);
+    
+                gridItem.appendChild(cardClone);
             } else {
+                // If no card, add a placeholder
                 const placeholder = document.createElement('div');
                 placeholder.textContent = 'Empty';
-                finalSequenceContainer.appendChild(placeholder);
+                placeholder.style.textAlign = 'center';
+                placeholder.style.color = '#ccc';
+                gridItem.appendChild(placeholder);
             }
+    
+            finalSequenceContainer.appendChild(gridItem);
         });
     }
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>UW TIPS - Risk Assessment Game</title>
@@ -8,6 +9,7 @@
     <!-- Include a viewport meta tag for responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body>
     <!-- Loading Screen -->
     <div id="loading-screen" class="screen active">
@@ -30,9 +32,12 @@
             <h1>Assessing Risk Game</h1>
             <p><b>Instructions:</b></p>
             <div class="instruction-container">
-                <li>You will be presented with 10 “real-life” situational cards that are randomly placed on the top and bottom of the screen. The aim of this activity is to arrange the cards based on your assessment of the level of risk associated with the pictured behavior.</li>
+                <li>You will be presented with 10 “real-life” situational cards that are randomly placed on the top and
+                    bottom of the screen. The aim of this activity is to arrange the cards based on your assessment of
+                    the level of risk associated with the pictured behavior.</li>
                 <br>
-                <li>Once on the page, drag and drop the cards from “Least Risky” to “Most Risky” -arranging the cards from Least Risky (1-5) on the top row and Most Risky (6-10) on the bottom row.</li>
+                <li>Once on the page, drag and drop the cards from “Least Risky” to “Most Risky” -arranging the cards
+                    from Least Risky (1-5) on the top row and Most Risky (6-10) on the bottom row.</li>
                 <br>
                 <li>Enjoy!</li>
             </div>
@@ -48,10 +53,13 @@
             </div>
 
             <div>
-            <h4>Arrange cards from "Least Risky (1)" to "Most Risky (10)"</h4>
+                <h4>Arrange cards from "Least Risky (1)" to "Most Risky (10)"</h4>
             </div>
 
             <div id="timer"></div>
+
+            <button id="reset-btn">Reset</button>
+            <br>
 
             <div id="carousel1" class="carousel">
                 <!-- Draggable Images (Cards) -->
@@ -61,7 +69,7 @@
                 <img src="images/NEW_elevator_button.jpg" alt="Card 4" class="card" draggable="true" id="card4">
                 <img src="images/NEW_mask_off.jpg" alt="Card 5" class="card" draggable="true" id="card5">
             </div>
-            
+
             <div id="boxes" class="boxes">
                 <!-- Drop boxes where images will be locked -->
                 <div class="drop-box" id="box1"><span class="drop-text">Least Risky (1)</span></div>
@@ -77,7 +85,7 @@
                 <div class="drop-box" id="box8"><span class="drop-text">8</span></div>
                 <div class="drop-box" id="box9"><span class="drop-text">9</span></div>
                 <div class="drop-box" id="box10"><span class="drop-text">Most Risky (10)</span></div>
-            </div>    
+            </div>
 
             <div id="carousel2" class="carousel">
                 <!-- Draggable Images (Cards) -->
@@ -87,8 +95,7 @@
                 <img src="images/NEW_reaching_out.jpg" alt="Card 9" class="card" draggable="true" id="card9">
                 <img src="images/NEW_shared_gym_equipment.jpg" alt="Card 10" class="card" draggable="true" id="card10">
             </div>
-        
-            <button id="reset-btn">Reset</button>
+
             <button id="done-btn">Done</button>
         </div>
     </div>
@@ -107,4 +114,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

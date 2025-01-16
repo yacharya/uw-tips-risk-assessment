@@ -245,6 +245,28 @@ button:disabled {
     border-radius: 8px;
 }
 
+/* Add this to your styles.css file */
+#final-sequence {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 columns */
+    grid-template-rows: repeat(2, 1fr);    /* 2 rows */
+    gap: 10px; /* Space between cards */
+    justify-items: center; /* Center cards horizontally */
+    align-items: center; /* Center cards vertically */
+    width: 100%; /* Ensure it takes full width */
+    max-width: 1200px; /* Adjust as needed */
+    margin: 0 auto; /* Center the grid */
+}
+
+#final-sequence .card {
+    width: 100%; /* Ensure cards fill the grid cells */
+    max-width: 180px; /* Adjust card size as needed */
+    height: auto; /* Maintain aspect ratio */
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    object-fit: contain; /* Ensure images fit properly */
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .container {
